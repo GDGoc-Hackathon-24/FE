@@ -38,6 +38,8 @@ const JanuaryDiary = () => {
     fetchDiaries();
   }, []);
 
+  
+
   const handleDateClick = (day: number) => {
     setSelectedDate(day);
   };

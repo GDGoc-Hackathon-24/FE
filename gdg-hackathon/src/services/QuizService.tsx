@@ -1,5 +1,5 @@
 import { get, post, put, del } from "@/shared/configs/axios";
-import { SignUpFormFamily, SignInFormFamily } from '@/types/contactService';
+import { SignInFormFamily } from '@/types/contactService';
 
 // Example API 서비스 로직
 export const getNoAnswerList = async (data: {userId: string}) => {
@@ -32,15 +32,6 @@ export const signInFamily = async (data: SignInFormFamily) => {
     }
   };
 
-export const updateExampleData = async (id: string, data: any) => {
-  try {
-    const response = await put(`/example/${id}`, data);
-    return response.data;
-  } catch (error) {
-    console.error('PUT 요청 실패:', error);
-    throw error;
-  }
-};
 
 export const deleteExampleData = async (id: string) => {
   try {

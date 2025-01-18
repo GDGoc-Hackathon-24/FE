@@ -1,4 +1,4 @@
-import { get, post, put, del } from "@/shared/configs/axios";
+import {post} from "@/shared/configs/axios";
 
 // Example API 서비스 로직
 export const getMyDiaries = async (userId : string) => {

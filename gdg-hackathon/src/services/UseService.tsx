@@ -32,15 +32,6 @@ export const signInFamily = async (data: SignInFormFamily) => {
     }
   };
 
-export const updateExampleData = async (id: string, data: any) => {
-  try {
-    const response = await put(`/example/${id}`, data);
-    return response.data;
-  } catch (error) {
-    console.error('PUT 요청 실패:', error);
-    throw error;
-  }
-};
 
 export const deleteExampleData = async (id: string) => {
   try {
