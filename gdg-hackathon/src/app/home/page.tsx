@@ -2,12 +2,21 @@
 import { getNoAnswerList } from "@/services/QuizService";
 import Card from "@/shared/ui/Card";
 import useQuizStore from "@/store/useUserStore";
+import useUserStore from "@/store/useUserStore2";
 import React, { useEffect } from "react";
 
 export default function MainPage() {
 
     const { quizList, setQuizList } = useQuizStore();
+    const { userId, setUserId } = useUserStore(); // Zustand 상태와 업데이트 함수 가져오기
 
+    useEffect(() => {
+      // 1/2 확률로 userId 설정
+      const randomUserId = Math.random() < 0.5 ? 4 : 10;
+      setUserId(randomUserId); // Zustand에 저장
+      console.log("설정된 userId:", randomUserId); // 디버깅 로그
+      console.log(userId);
+    }, [setUserId]);
   const handleQuizClick = () => {
     console.log("바로 풀러가기 클릭");
   };
@@ -50,7 +59,7 @@ export default function MainPage() {
           description="일기를 작성하면 더 다양한 퀴즈를 풀 수 있어요."
           buttonText="일기 쓰러가기"
           onClick={handleWriteDiaryClick}
-          url="/diary"
+          url="home/diary/calender"
         />
       </main>
     </div>

@@ -11,3 +11,14 @@ export const getMyDiaries = async (userId : string) => {
   }
 };
 
+export const getMyDiary = async (diaryId : number) => {
+    try {
+      const response = await post(`/api/diary/allList/${diaryId}`);
+      return response;
+    } catch (error) {
+      console.error('GET 요청 실패:', error);
+      throw error;
+    }
+  };
+  
+

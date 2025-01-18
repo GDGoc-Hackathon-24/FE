@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const DiaryPage = () => {
   const [mood, setMood] = useState<string | null>(null);
@@ -14,7 +15,9 @@ const DiaryPage = () => {
     별로예요: "/imgs/sad.png",
     최악이에요: "/imgs/angry.png",
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const router = useRouter();
   const handleMoodClick = (selectedMood: string) => {
     setMood(selectedMood);
   };
@@ -29,7 +32,7 @@ const DiaryPage = () => {
     console.log("기분:", mood);
     console.log("일기:", diary);
     console.log("사진:", photo);
-    alert("작성 완료!");
+    setIsModalOpen(true);
   };
 
   return (
@@ -108,7 +111,27 @@ const DiaryPage = () => {
           작성 완료
         </button>
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white w-[400px] p-6 rounded-lg shadow-lg max-h-[80vh] overflow-auto">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+            오늘의 일기가 기록되었습니다.
+          </h2>
+          <p className="text-gray-600 mb-6 text-center">
+          당신의 하루가 더 소중하게 남을 거예요! 
+          </p>
+          <button
+            onClick={()=> {router.push('/home/diary/calender')}}
+            className="bg-green-500 text-white py-2 px-4 rounded-lg font-bold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+          >
+            내가 쓴 일기로 이동
+          </button>
+        </div>
+      </div>
+      )}
+
     </div>
+
   );
 };
 

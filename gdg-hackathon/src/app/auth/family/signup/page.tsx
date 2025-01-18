@@ -1,7 +1,7 @@
 "use client";
 
-import { createFamily } from "@/services/UseService";
 import InputField from "@/shared/ui/InputField"; // 공용 InputField 컴포넌트 가져오기
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignupPage() {
@@ -15,10 +15,17 @@ export default function SignupPage() {
   const handleInputChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  const router = useRouter();
+
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+  const closeModal = () => {
+    setIsModalOpen(false); // 모달 닫기
+  };
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    try {
+    setIsModalOpen(true)
+/*    try {
       console.log(formData)
       const result = await createFamily(formData);
       console.log('가족 정보 추가 성공:', result);
@@ -26,12 +33,12 @@ export default function SignupPage() {
     } catch (error) {
       console.error('가족 정보 추가 실패:', error);
       alert('가족 정보를 추가하는 중 오류가 발생했습니다.');
-    }    
+    }*/    
   };
 
 
   return (
-    <div className="flex items-center justify-center bg-yellow-50 rounded-lg">
+    <div className="flex items-center justify-center bg-yellow-50 rounded-lg mt-16">
       <div className="w-[1200px] h-[500px] max-w-4xl bg-white rounded-xl shadow-lg p-10">
       {/* 제목 */}
         <h1 className="text-center text-2xl font-bold text-gray-800 mb-8">회원가입</h1>
@@ -49,15 +56,15 @@ export default function SignupPage() {
                 />
 
                 <InputField
-                label="노인 전화번호"
-                placeholder="노인 전화번호를 입력하세요"
+                label="가족 전화번호"
+                placeholder="가족 전화번호를 입력하세요"
                 value={formData.phoneNumber}
                 onChange={(value) => handleInputChange("phoneNumber", value)}
                 />
 
                 <InputField
                 label="관계"
-                placeholder="노인과의 관계를 입력하세요"
+                placeholder="가족과의의 관계를 입력하세요"
                 value={formData.relationship}
                 onChange={(value) => handleInputChange("relationship", value)}
                 />
@@ -81,6 +88,24 @@ export default function SignupPage() {
           </button>
         </form>
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white w-[400px] p-6 rounded-lg shadow-lg max-h-[80vh] overflow-auto">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+            축하합니다!
+          </h2>
+          <p className="text-gray-600 mb-6 text-center">
+            회원가입이 완료되었습니다.
+          </p>
+          <button
+            onClick={()=> {router.push('/auth/family')}}
+            className="bg-green-500 text-white py-2 px-4 rounded-lg font-bold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+          >
+            로그인 페이지 이동
+          </button>
+        </div>
+      </div>
+      )}
     </div>
   );
 }

@@ -3,18 +3,13 @@ export default function Home() {
       <div className="min-h-screen flex flex-col items-center justify-center">
         {/* 로고 */}
         <div className="mb-6 w-1/6">
-          <div className="bg-white text-center text-black font-semibold px-4 py-2 rounded shadow">
-            로고
-          </div>
         </div>
   
         {/* 메인 콘텐츠 */}
         <div className="bg-white w-[1000px] h-[550px] rounded-xl shadow-lg p-8 text-center">
           <h1 className="text-[50px] font-bold mb-4">환영합니다!</h1>
-          <p className="text-gray-600 mb-8">
-            서비스 소개 문구 넣을거예요
-            <br />
-            아마 두 줄 정도 쓰지 않을까요...
+          <p className="text-gray-600 mb-8 text-xl font-bold">
+            추잉은 가족의 추억과 일기를 기반으로 퀴즈를 풀이하는 치매 예방 서비스입니다.            <br />
           </p>
   
           {/* 버튼 영역 */}

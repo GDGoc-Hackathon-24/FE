@@ -35,4 +35,6 @@ const useQuizStore = create<QuizState>((set) => ({
     })),
 }));
 
+
+
 export default useQuizStore;

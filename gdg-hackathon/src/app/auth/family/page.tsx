@@ -14,7 +14,8 @@ export default function FamilyPage() {
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    const form = {
+    router.push('/home')
+/*     const form = {
       name: name,
       phoneNumber: phone
     }
@@ -25,13 +26,13 @@ export default function FamilyPage() {
     } catch (error) {
       console.error('로그인 실패:', error);
     }
-
+*/
   };
 
   return (
     <>
         <h1 className="text-center text-xl font-bold text-gray-800 mb-6">
-          로그인하고 내 노인에게 추억 퀴즈를 제출해보세요!
+          로그인하고 내 가족에게 추억 퀴즈를 제출해보세요!
         </h1>
 
     <div className="flex items-center justify-center bg-yellow-50 rounded-lg">
@@ -60,8 +61,8 @@ export default function FamilyPage() {
           />
 
         <InputField
-            label="노인 전화번호"
-            placeholder="노인 전화번호를 입력하세요"
+            label="가족 전화번호"
+            placeholder="가족 전화번호를 입력하세요"
             value={seniorPhone}
             onChange={setSeniorPhone} // 상태 업데이트 함수 전달
           />

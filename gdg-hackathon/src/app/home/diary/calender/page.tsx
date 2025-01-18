@@ -21,14 +21,12 @@ const JanuaryDiary = () => {
       try {
         const response = await getMyDiaries("10"); // userId가 "10"인 데이터 가져오기
         const entries = response.result || [];
-
         // 날짜별로 데이터를 매핑
         const mappedEntries = entries.reduce((acc: Record<number, DiaryEntry>, entry: DiaryEntry) => {
           const day = new Date(entry.date).getDate(); // 날짜 추출
           acc[day] = entry; // 일기 데이터를 해당 날짜에 저장
           return acc;
         }, {});
-
         setDiaryEntries(mappedEntries);
       } catch (error) {
         console.error("일기 데이터를 가져오는 데 실패했습니다:", error);
@@ -38,10 +36,17 @@ const JanuaryDiary = () => {
     fetchDiaries();
   }, []);
 
-  
-
   const handleDateClick = (day: number) => {
     setSelectedDate(day);
+  };
+
+  // 감정을 한글로 변환
+  const emotionMap: { [key: string]: string } = {
+    HAPPY: "행복",
+    SAD: "슬픔",
+    ANGRY: "화남",
+    NEUTRAL: "보통",
+    EXCITED: "기쁨",
   };
 
   return (
@@ -89,13 +94,18 @@ const JanuaryDiary = () => {
         <div className="bg-gray-50 p-6 rounded-lg shadow w-full md:w-1/2 flex flex-col items-center">
           {selectedDate && diaryEntries[selectedDate] ? (
             <>
-              <h2 className="text-lg font-bold text-green-600 mb-2 font-sans">
-                {diaryEntries[selectedDate].todayEmotion}, {selectedDate}일
-              </h2>
+              <div className="text-center mb-6">
+                <h2 className="text-xl font-bold text-gray-800">
+                  {selectedDate}일 ({new Date(diaryEntries[selectedDate].date).toLocaleDateString()})
+                </h2>
+                <p className="mt-2 text-lg text-gray-600">
+                  감정: {emotionMap[diaryEntries[selectedDate].todayEmotion] || "알 수 없음"}
+                </p>
+              </div>
               <p className="text-gray-700 mb-4 leading-relaxed font-sans text-left">
                 {diaryEntries[selectedDate].content}
               </p>
-              <div className="w-full h-48 mt-16 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+              <div className="w-full h-48 mt-4 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                 {diaryEntries[selectedDate].photoUrls ? (
                   <img
                     src={diaryEntries[selectedDate].photoUrls[0]}
@@ -110,7 +120,7 @@ const JanuaryDiary = () => {
           ) : (
             <div className="flex items-center justify-center">
               <div className="bg-white p-4 rounded-lg border w-full h-[400px] flex flex-col justify-center items-center">
-                <p className="flex text-gray-500 text-center items-center justify-center text-2xl font-sans mb-4">
+                <p className="text-gray-500 text-center text-2xl font-sans mb-4">
                   {selectedDate
                     ? `1월 ${selectedDate}일, 작성한 일기가 없어요`
                     : "날짜를 선택하세요."}
