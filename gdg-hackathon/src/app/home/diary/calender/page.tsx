@@ -1,21 +1,43 @@
 "use client";
+import { getMyDiaries } from "@/services/DiaryService";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+interface DiaryEntry {
+  id: number;
+  content: string;
+  date: string;
+  todayEmotion: string;
+  photoUrls: string[] | null;
+}
 
 const JanuaryDiary = () => {
-  const [selectedDate, setSelectedDate] = useState<number | null>(18);
-
-  // 날짜에 해당하는 일기 데이터를 준비
-  const diaryEntries: Record<number, { mood: string; title: string; content: string; image: string }> = {
-    18: {
-      mood: "기분이 최고였던",
-      title: "1월 18일 토요일",
-      content:
-        "오늘은 아침에 마당에 나가서 햇볕을 쬐었어. 옆집 강아지가 나를 보고 꼬리를 흔들더라. 오래된 장독대 옆에 핀 작은 꽃을 보니 마음이 따뜻해졌어. 그리고 집 앞에서 오랜된 친구 영희를 만났어. 옛날 얘기하며 한참 웃었더니 기분이 좋아졌지. 이런 날이 조금만 더 많았으면 좋겠다.",
-      image: "https://via.placeholder.com/150", // 이미지 URL
-    },
-  };
+  const [diaryEntries, setDiaryEntries] = useState<Record<number, DiaryEntry>>({});
+  const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchDiaries = async () => {
+      try {
+        const response = await getMyDiaries("10"); // userId가 "10"인 데이터 가져오기
+        const entries = response.result || [];
+
+        // 날짜별로 데이터를 매핑
+        const mappedEntries = entries.reduce((acc: Record<number, DiaryEntry>, entry: DiaryEntry) => {
+          const day = new Date(entry.date).getDate(); // 날짜 추출
+          acc[day] = entry; // 일기 데이터를 해당 날짜에 저장
+          return acc;
+        }, {});
+
+        setDiaryEntries(mappedEntries);
+      } catch (error) {
+        console.error("일기 데이터를 가져오는 데 실패했습니다:", error);
+      }
+    };
+
+    fetchDiaries();
+  }, []);
+
   const handleDateClick = (day: number) => {
     setSelectedDate(day);
   };
@@ -50,6 +72,8 @@ const JanuaryDiary = () => {
                 className={`w-10 h-10 rounded-full text-sm flex items-center justify-center transition-all ${
                   selectedDate === day
                     ? "bg-green-300 text-white font-bold"
+                    : diaryEntries[day]
+                    ? "bg-blue-200 text-blue-900" // 일기가 있는 날짜
                     : "bg-white text-gray-700 hover:bg-green-100"
                 }`}
               >
@@ -59,43 +83,49 @@ const JanuaryDiary = () => {
           </div>
         </div>
 
+        {/* 오른쪽: 선택한 날짜의 일기 */}
         <div className="bg-gray-50 p-6 rounded-lg shadow w-full md:w-1/2 flex flex-col items-center">
-  {selectedDate && diaryEntries[selectedDate] ? (
-    <>
-      <h2 className="text-lg font-bold text-green-600 mb-2 font-sans">
-        {diaryEntries[selectedDate].mood}, {diaryEntries[selectedDate].title}
-      </h2>
-      <p className="text-gray-700 mb-4 leading-relaxed font-sans text-left">
-        {diaryEntries[selectedDate].content}
-      </p>
-      <div className="w-full h-48 mt-16 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-        <img
-          src={"https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbhv1ce%2FbtrZ4bakE2q%2FMFXFCRPme2CN10TVJXe04k%2Fimg.png"}
-          alt="Diary visual"
-          className="w-full h-full object-cover"
-        />
+          {selectedDate && diaryEntries[selectedDate] ? (
+            <>
+              <h2 className="text-lg font-bold text-green-600 mb-2 font-sans">
+                {diaryEntries[selectedDate].todayEmotion}, {selectedDate}일
+              </h2>
+              <p className="text-gray-700 mb-4 leading-relaxed font-sans text-left">
+                {diaryEntries[selectedDate].content}
+              </p>
+              <div className="w-full h-48 mt-16 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                {diaryEntries[selectedDate].photoUrls ? (
+                  <img
+                    src={diaryEntries[selectedDate].photoUrls[0]}
+                    alt="Diary visual"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <p className="text-gray-500">이미지가 없습니다.</p>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center justify-center">
+              <div className="bg-white p-4 rounded-lg border w-full h-[400px] flex flex-col justify-center items-center">
+                <p className="flex text-gray-500 text-center items-center justify-center text-2xl font-sans mb-4">
+                  {selectedDate
+                    ? `1월 ${selectedDate}일, 작성한 일기가 없어요`
+                    : "날짜를 선택하세요."}
+                </p>
+                {selectedDate && (
+                  <button
+                    onClick={() => router.push("/home/diary/write")} // 작성 페이지로 이동
+                    className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition"
+                  >
+                    작성하러가기
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </>
-  ) : (
-<div className="flex items-center justify-center">
-<div className="bg-white p-4 rounded-lg border w-full h-[400px] flex flex-col justify-center items-center">
-        <p className="flex text-gray-500 text-center items-center justify-center text-2xl font-sans mb-4">
-          {selectedDate
-            ? `1월 ${selectedDate}일, 작성한 일기가 없어요`
-            : "날짜를 선택하세요."}
-        </p>
-        {selectedDate && (
-          <button
-            onClick={() => router.push('/home/diary/write')} // 버튼 클릭 시 동작
-            className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition"
-          >
-            작성하러가기
-          </button>
-        )}
-      </div>
-    </div>
-  )}
-</div></div>
     </div>
   );
 };

@@ -6,22 +6,24 @@ import useQuizStore, { Option } from "@/store/useUserStore";
 const QuizPage = () => {
   const { quizList, setAnswer } = useQuizStore(); // Zustand에서 상태 가져오기
   const [currentIndex, setCurrentIndex] = useState(0); // 현재 퀴즈 인덱스
-  
+  const [selectedOption, setSelectedOption] = useState<number | null>(null); // 선택된 옵션 번호
+  const [isAnswered, setIsAnswered] = useState(false); // 현재 문제의 정답 확인 여부
+
   // 현재 퀴즈 데이터
   const currentQuiz = quizList[currentIndex];
 
   const handleOptionClick = (optionNumber: number) => {
-    console.log(`${optionNumber} 선택됨`);
-    if (currentQuiz) {
-      setAnswer(currentQuiz.id, optionNumber); // Zustand에 답 저장
-    }
+    if (isAnswered) return; // 이미 답을 확인했으면 클릭 방지
 
-    // 다음 퀴즈로 이동 (마지막 퀴즈면 종료)
-    if (currentIndex < quizList.length - 1) {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-    } else {
-      console.log("퀴즈 종료");
-    }
+    setSelectedOption(optionNumber); // 선택된 옵션 저장
+    setAnswer(currentQuiz.id, optionNumber); // Zustand에 답 저장
+    setIsAnswered(true); // 정답 확인 상태로 변경
+  };
+
+  const handleNextQuestion = () => {
+    setSelectedOption(null); // 선택 초기화
+    setIsAnswered(false); // 정답 확인 상태 초기화
+    setCurrentIndex((prevIndex) => prevIndex + 1); // 다음 문제로 이동
   };
 
   return (
@@ -42,9 +44,46 @@ const QuizPage = () => {
                 key={option.number}
                 label={option.text}
                 onClick={() => handleOptionClick(option.number)}
+                variant={
+                  isAnswered
+                    ? option.number === currentQuiz.answer
+                      ? "correct" // 정답
+                      : option.number === selectedOption
+                      ? "disabled" // 사용자가 선택한 오답
+                      : "default" // 나머지 옵션
+                    : "default" // 기본 상태
+                }
               />
             ))}
           </div>
+
+          {/* 정답 확인 메시지 및 다음 버튼 */}
+          {isAnswered && (
+            <div className="mt-6 text-center">
+              {selectedOption === currentQuiz.answer ? (
+                <p className="text-green-600 font-bold text-lg">
+                  정답입니다! 🎉
+                </p>
+              ) : (
+                <p className="text-red-600 font-bold text-lg">
+                  아쉽습니다! 정답은{" "}
+                  {
+                    currentQuiz.options.find(
+                      (option: Option) => option.number === currentQuiz.answer
+                    )?.text
+                  }
+                  입니다.
+                </p>
+              )}
+
+              <button
+                onClick={handleNextQuestion}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 transition"
+              >
+                {currentIndex < quizList.length - 1 ? "다음 문제" : "결과 보기"}
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <div className="text-center">

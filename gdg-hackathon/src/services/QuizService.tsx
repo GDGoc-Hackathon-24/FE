@@ -12,12 +12,12 @@ export const getNoAnswerList = async (data: {userId: string}) => {
   }
 };
 
-export const createFamily = async (data: SignUpFormFamily) => {
+export const isRightAnswer = async (data: {quizId: string, answer: string}) => {
   try {
-    const response = await post(`/api/quiz/`, data);
+    const response = await post(`/api/quiz/answer`, data);
     return response.data;
   } catch (error) {
-    console.error('POST 요청 실패:', error);
+    console.error('퀴즈 정답 조회 실패:', error);
     throw error;
   }
 };

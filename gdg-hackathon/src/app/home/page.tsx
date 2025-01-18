@@ -43,7 +43,7 @@ export default function MainPage() {
           description="보호자가 퀴즈를 출제했어요."
           buttonText="바로 풀러가기"
           onClick={handleQuizClick}
-          url="/quiz"
+          url="home/quiz"
         />)}
         <Card
           title="오늘의 일기를 아직 작성 안 하셨네요."
