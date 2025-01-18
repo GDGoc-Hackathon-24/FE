@@ -1,5 +1,4 @@
 "use client";
-import { AuthProvider, useAuth } from "@/app/context/AuthContext";
 import { signInFamily } from "@/services/UseService";
 import InputField from "@/shared/ui/InputField";
 import { useRouter } from "next/navigation";
@@ -9,7 +8,6 @@ export default function FamilyPage() {
   const [name, setName] = useState(""); // 이름 상태
   const [phone, setPhone] = useState(""); // 전화번호 상태
   const [seniorPhone, setSeniorPhone] = useState(""); // 노인 전화번호 상태
-  const { setId } = useAuth();
 
 
   const router = useRouter();
@@ -23,7 +21,6 @@ export default function FamilyPage() {
     // 서버로 데이터 전송 (예시)
     try {
       const response = await signInFamily(form);
-      setId(response.data.result.familyId);
       console.log('로그인 성공! ID:', response.data.id);
     } catch (error) {
       console.error('로그인 실패:', error);
@@ -32,7 +29,7 @@ export default function FamilyPage() {
   };
 
   return (
-    <AuthProvider>
+    <>
         <h1 className="text-center text-xl font-bold text-gray-800 mb-6">
           로그인하고 내 노인에게 추억 퀴즈를 제출해보세요!
         </h1>
@@ -87,6 +84,6 @@ export default function FamilyPage() {
         </form>
       </div>
     </div>
-    </AuthProvider>
+    </>
   );
 }
