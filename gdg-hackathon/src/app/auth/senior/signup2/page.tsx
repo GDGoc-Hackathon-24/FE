@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 export default function SignUpPage() {
     const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
     const router = useRouter();
-  
 
     const [formData, setFormData] = useState({
     name: "",
