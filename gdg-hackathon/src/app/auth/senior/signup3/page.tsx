@@ -26,9 +26,12 @@ export default function QuizPage() {
     hobby: "",
     medicine: "",
   });
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+  const closeModal = () => {
+    setIsModalOpen(false); // 모달 닫기
+  };
 
 
-  // localStorage에서 이전 데이터 가져오기
   useEffect(() => {
     const storedData = localStorage.getItem("signupData");
     if (storedData) {
@@ -46,27 +49,28 @@ export default function QuizPage() {
       ...previousData,
       ...answers,
     };
+    setIsModalOpen(true);
 
     console.log("최종 제출 데이터:", fullData);
   };
 
   return (
     <>
-      <h1 className="text-center text-xl font-bold text-gray-800 mb-4 mt-16">
+      <h1 className="text-center text-2xl font-bold text-gray-800 mb-6 mt-16">
         기본 정보를 토대로 퀴즈를 내드릴 거예요.
       </h1>
-      <p className="text-center text-sm text-gray-500 mb-8">
+      <p className="text-center text-base text-gray-500 mb-10">
         가입 초반에 입력한 기본 정보와 관련된 문제를 제출해요.
       </p>
 
-      <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg p-8 space-y-8 mt-8 mb-8">
-        <form onSubmit={handleSubmit} className="space-y-8">
+      <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg px-12 py-10 space-y-10 mt-8 mb-10">
+        <form onSubmit={handleSubmit} className="space-y-10">
           {/* 첫 번째 질문 */}
           <div>
-            <h2 className="text-lg font-medium text-gray-700 mb-4">
+            <h2 className="font-bold text-lg text-gray-800 mb-6">
               현재 거주 환경이 어떻게 되세요?
             </h2>
-            <div className="flex space-x-4">
+            <div className="flex space-x-6">
               {[
                 { label: "도시에 살아요", value: "도시" },
                 { label: "시골에 살아요", value: "시골" },
@@ -74,7 +78,7 @@ export default function QuizPage() {
                 <button
                   key={option.value}
                   type="button"
-                  className={`flex-1 py-3 px-4 border rounded-lg text-center ${
+                  className={`flex-1 py-4 px-6 border rounded-lg text-center font-bold text-lg ${
                     answers.environment === option.value
                       ? "bg-green-100 border-green-500"
                       : "bg-white border-gray-300"
@@ -89,12 +93,15 @@ export default function QuizPage() {
 
           {/* 두 번째 질문 */}
           <div>
-            <h2 className="text-lg font-medium text-gray-700 mb-4">
+            <h2 className="text-lg font-bold text-gray-800 mb-6">
               자식이 얼마나 있으신가요?
             </h2>
-            <div className="flex space-x-4">
-              <div className="flex flex-col items-center space-y-2">
-                <label htmlFor="childrenMale" className="text-sm text-gray-600">
+            <div className="flex space-x-6">
+              <div className="flex flex-col items-center space-y-3">
+                <label
+                  htmlFor="childrenMale"
+                  className="text-base font-bold text-gray-600"
+                >
                   남
                 </label>
                 <input
@@ -105,13 +112,13 @@ export default function QuizPage() {
                   onChange={(e) =>
                     handleAnswerChange("childrenMale", e.target.value)
                   }
-                  className="w-16 px-2 py-1 border rounded-lg text-center focus:outline-none focus:ring-green-500 focus:border-green-500"
+                  className="w-20 px-3 py-2 border rounded-lg text-center font-bold focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
               </div>
-              <div className="flex flex-col items-center space-y-2">
+              <div className="flex flex-col items-center space-y-3">
                 <label
                   htmlFor="childrenFemale"
-                  className="text-sm text-gray-600"
+                  className="text-base font-bold text-gray-600"
                 >
                   녀
                 </label>
@@ -123,7 +130,7 @@ export default function QuizPage() {
                   onChange={(e) =>
                     handleAnswerChange("childrenFemale", e.target.value)
                   }
-                  className="w-16 px-2 py-1 border rounded-lg text-center focus:outline-none focus:ring-green-500 focus:border-green-500"
+                  className="w-20 px-3 py-2 border rounded-lg text-center font-bold focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
               </div>
             </div>
@@ -131,10 +138,10 @@ export default function QuizPage() {
 
           {/* 세 번째 질문 */}
           <div>
-            <h2 className="text-lg font-medium text-gray-700 mb-4">
+            <h2 className="text-lg font-bold text-gray-800 mb-6">
               요즘 어떤 취미를 가지고 계신가요?
             </h2>
-            <div className="flex space-x-4">
+            <div className="flex space-x-6">
               {[
                 { label: "걷기", value: "걷기" },
                 { label: "기타", value: "기타" },
@@ -142,7 +149,7 @@ export default function QuizPage() {
                 <button
                   key={option.value}
                   type="button"
-                  className={`flex-1 py-3 px-4 border rounded-lg text-center ${
+                  className={`flex-1 py-4 px-6 border rounded-lg text-center font-bold text-lg ${
                     answers.hobby === option.value
                       ? "bg-green-100 border-green-500"
                       : "bg-white border-gray-300"
@@ -157,27 +164,51 @@ export default function QuizPage() {
 
           {/* 네 번째 질문 */}
           <div>
-            <h2 className="text-lg font-medium text-gray-700 mb-4">
+            <h2 className="text-lg font-bold text-gray-800 mb-6">
               현재 먹고 있는 약이 있다면 한 가지만 적어주세요.
             </h2>
             <input
               type="text"
               value={answers.medicine}
               onChange={(e) => handleAnswerChange("medicine", e.target.value)}
-              className="w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              className="w-full px-6 py-4 border rounded-lg shadow-sm font-bold focus:outline-none focus:ring-green-500 focus:border-green-500"
               placeholder="약 이름을 적어주세요."
             />
           </div>
 
           {/* 완료 버튼 */}
+          <div className="flex justify-center">
           <button
             type="submit"
-            className="w-full bg-green-500 text-white py-3 rounded-lg shadow-lg text-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-3/6 bg-green-500 text-center text-white py-4 rounded-lg shadow-lg text-xl font-bold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             완료
           </button>
+          </div>
         </form>
+
+      
+
       </div>
+      {/* 모달 */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white w-[400px] p-6 rounded-lg shadow-lg max-h-[80vh] overflow-auto">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+            축하합니다!
+          </h2>
+          <p className="text-gray-600 mb-6 text-center">
+            회원가입이 완료되었습니다.
+          </p>
+          <button
+            onClick={closeModal}
+            className="bg-green-500 text-white py-2 px-4 rounded-lg font-bold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+          >
+            로그인 페이지 이동
+          </button>
+        </div>
+      </div>
+      )}
     </>
   );
 }

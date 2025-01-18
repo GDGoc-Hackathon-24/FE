@@ -19,14 +19,31 @@ export default function Home() {
   
           {/* 버튼 영역 */}
           <div className="flex items-center justify-center gap-40">
-            <a className="border border-gray-300 w-[300px] h-[300px] rounded-lg p-6 shadow hover:bg-gray-100" href="/auth/senior">
-              노인
+            <a
+              className="border border-gray-300 w-[300px] h-[300px] rounded-lg p-6 shadow hover:bg-gray-100 flex flex-col items-center justify-center"
+              href="/auth/senior"
+            >
+              <img
+                src="/imgs/oldman.png" // 노인 이미지를 대체
+                alt="노인"
+                className="w-[150px] h-[150px] object-cover mb-4"
+              />
+              <span className="text-lg font-semibold">노인</span>
             </a>
-            <a className="border border-gray-300 w-[300px] h-[300px] rounded-lg p-6 shadow hover:bg-gray-100" href="/auth/family">
-              가족
+            <a
+              className="border border-gray-300 w-[300px] h-[300px] rounded-lg p-6 shadow hover:bg-gray-100 flex flex-col items-center justify-center"
+              href="/auth/family"
+            >
+              <img
+                src="/imgs/family.png" // 가족 이미지를 대체
+                alt="가족"
+                className="w-[150px] h-[150px] object-cover mb-4"
+              />
+              <span className="text-lg font-semibold">가족</span>
             </a>
           </div>
         </div>
       </div>
     );
   }
+  

@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function SignUpPage() {
-    const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
-    const router = useRouter();
+  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
+  const router = useRouter();
 
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     phone: "",
     gender: "",
-    image: selectedProfile
+    image: selectedProfile,
   });
 
   useEffect(() => {
@@ -30,26 +30,24 @@ export default function SignUpPage() {
     }
   }, [selectedProfile]);
 
+  // 프로필 데이터에 이미지 추가
   const profiles = [
-    { id: "1", label: "프로필 1" },
-    { id: "2", label: "프로필 2" },
-    { id: "3", label: "프로필 3" },
-    { id: "4", label: "프로필 4" },
+    { id: "1", label: "프로필 1", image: "/imgs/profile1.png" },
+    { id: "2", label: "프로필 2", image: "/imgs/profile2.png" },
+    { id: "3", label: "프로필 3", image: "/imgs/profile3.png" },
+    { id: "4", label: "프로필 4", image: "/imgs/profile4.png" },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedProfile) {
-        localStorage.setItem("signupData", JSON.stringify(formData));
-        console.log("선택된 프로필:", selectedProfile);
-        router.push("/auth/senior/signup3");
-      // 다음 페이지로 이동하거나 상태 전송 로직 추가
+      localStorage.setItem("signupData", JSON.stringify(formData));
+      console.log("선택된 프로필:", selectedProfile);
+      router.push("/auth/senior/signup3");
     } else {
       alert("프로필을 선택해주세요!");
     }
   };
-
-
 
   return (
     <div className="flex items-center justify-center bg-yellow-50">
@@ -72,7 +70,11 @@ export default function SignUpPage() {
               } hover:bg-gray-100`}
               onClick={() => setSelectedProfile(profile.id)}
             >
-              <div className="w-12 h-12 bg-gray-200 rounded-full mb-2"></div>
+              <img
+                src={profile.image}
+                alt={profile.label}
+                className="w-20 h-20 object-cover rounded-full mb-2"
+              />
               <span className="text-sm text-gray-700">{profile.label}</span>
             </button>
           ))}
