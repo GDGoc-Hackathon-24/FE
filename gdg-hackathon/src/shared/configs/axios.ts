@@ -37,9 +37,9 @@ API.interceptors.response.use(
   }
 );
 
-export const get = (url: string, params?: any) => API.get(url, { params });
-export const post = (url: string, data?: any) => API.post(url, data);
-export const put = (url: string, data?: any) => API.put(url, data);
+export const get = <T>(url: string, params?: T) => API.get(url, { params });
+export const post = <T>(url: string, data?: T) => API.post(url, data);
+export const put = <T>(url: string, data?: T) => API.put(url, data);
 export const del = (url: string) => API.delete(url);
 
 export default API;
