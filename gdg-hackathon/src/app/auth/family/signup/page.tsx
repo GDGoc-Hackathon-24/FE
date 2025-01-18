@@ -18,9 +18,7 @@ export default function SignupPage() {
   const router = useRouter();
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-  const closeModal = () => {
-    setIsModalOpen(false); // 모달 닫기
-  };
+
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
