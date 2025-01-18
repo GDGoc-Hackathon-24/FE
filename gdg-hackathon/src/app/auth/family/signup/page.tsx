@@ -1,13 +1,14 @@
 "use client";
 
+import { createFamily } from "@/services/UseService";
 import InputField from "@/shared/ui/InputField"; // 공용 InputField 컴포넌트 가져오기
 import { useState } from "react";
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
-    oldPhone: "",
+    phoneNumber: "",
+    relationship: "",
     gender: "",
   });
 
@@ -15,11 +16,19 @@ export default function SignupPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    console.log("폼 데이터:", formData);
-    // 서버로 데이터 전송 로직 추가 가능
+    try {
+      console.log(formData)
+      const result = await createFamily(formData);
+      console.log('가족 정보 추가 성공:', result);
+      alert('가족 정보가 성공적으로 추가되었습니다!');
+    } catch (error) {
+      console.error('가족 정보 추가 실패:', error);
+      alert('가족 정보를 추가하는 중 오류가 발생했습니다.');
+    }    
   };
+
 
   return (
     <div className="flex items-center justify-center bg-yellow-50 rounded-lg">
@@ -40,17 +49,17 @@ export default function SignupPage() {
                 />
 
                 <InputField
-                label="전화번호"
-                placeholder="전화번호를 입력하세요"
-                value={formData.phone}
-                onChange={(value) => handleInputChange("phone", value)}
+                label="노인 전화번호"
+                placeholder="노인 전화번호를 입력하세요"
+                value={formData.phoneNumber}
+                onChange={(value) => handleInputChange("phoneNumber", value)}
                 />
 
                 <InputField
-                label="노인 전화번호"
-                placeholder="노인 전화번호를 입력하세요"
-                value={formData.oldPhone}
-                onChange={(value) => handleInputChange("oldPhone", value)}
+                label="관계"
+                placeholder="노인과의 관계를 입력하세요"
+                value={formData.relationship}
+                onChange={(value) => handleInputChange("relationship", value)}
                 />
             </div>
 
