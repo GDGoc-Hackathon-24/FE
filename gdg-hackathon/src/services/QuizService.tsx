@@ -1,4 +1,4 @@
-import { get, post, put, del } from "@/shared/configs/axios";
+import { get, post, del } from "@/shared/configs/axios";
 import { SignInFormFamily } from '@/types/contactService';
 
 // Example API 서비스 로직
