@@ -27,7 +27,6 @@ export default function QuizPage() {
     medicine: "",
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(true);
 
   // localStorage에서 이전 데이터 가져오기
   useEffect(() => {
@@ -49,7 +48,6 @@ export default function QuizPage() {
     };
 
     console.log("최종 제출 데이터:", fullData);
-    setIsModalOpen(true);
   };
 
   return (
