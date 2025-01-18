@@ -9,9 +9,9 @@ const DiaryPage = () => {
 
   const moodImages = {
     최고예요: "/imgs/happy.png",
-    좋았어요: "/imgs/good.png",
-    그저그랬어요: "/imgs/neutral.png",
-    별로예요: "/imgs/bad.png",
+    좋았어요: "/imgs/smile.png",
+    그저그랬어요: "/imgs/soso.png",
+    별로예요: "/imgs/sad.png",
     최악이에요: "/imgs/angry.png",
   };
 
@@ -61,7 +61,7 @@ const DiaryPage = () => {
                   height={40}
                   className="rounded-lg mb-2"
                 />
-                <span className="text-sm">{moodText}</span>
+                <span className="text-xs">{moodText}</span>
               </button>
             ))}
           </div>
