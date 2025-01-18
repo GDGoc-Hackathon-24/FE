@@ -1,12 +1,18 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function SignUpPage() {
-  const [formData, setFormData] = useState({
+    const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
+    const router = useRouter();
+  
+
+    const [formData, setFormData] = useState({
     name: "",
     phone: "",
     gender: "",
+    image: selectedProfile
   });
 
   useEffect(() => {
@@ -16,7 +22,14 @@ export default function SignUpPage() {
     }
   }, []);
 
-  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
+  useEffect(() => {
+    if (selectedProfile) {
+      setFormData((prev) => ({
+        ...prev,
+        image: selectedProfile,
+      }));
+    }
+  }, [selectedProfile]);
 
   const profiles = [
     { id: "1", label: "프로필 1" },
@@ -28,12 +41,16 @@ export default function SignUpPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedProfile) {
-      console.log("선택된 프로필:", selectedProfile);
+        localStorage.setItem("signupData", JSON.stringify(formData));
+        console.log("선택된 프로필:", selectedProfile);
+        router.push("/auth/senior/signup3");
       // 다음 페이지로 이동하거나 상태 전송 로직 추가
     } else {
       alert("프로필을 선택해주세요!");
     }
   };
+
+
 
   return (
     <div className="flex items-center justify-center bg-yellow-50">
